@@ -15,6 +15,8 @@ final class GoldScanViewModel: ObservableObject {
     private let fusionEngine: AccuracyFusionEngine
     private let motionService: MotionStabilityService
     private let repository: ScanRepository
+    private let accessControl: AccessControlService
+    private let subscriptionService: SubscriptionService
     private let mockTransport: MockDeviceTransport?
 
     init(
@@ -23,7 +25,9 @@ final class GoldScanViewModel: ObservableObject {
         rulesEngine: GoldRulesEngine,
         fusionEngine: AccuracyFusionEngine,
         motionService: MotionStabilityService,
-        repository: ScanRepository
+        repository: ScanRepository,
+        accessControl: AccessControlService,
+        subscriptionService: SubscriptionService
     ) {
         self.deviceManager = deviceManager
         self.mockTransport = mockTransport
@@ -31,6 +35,8 @@ final class GoldScanViewModel: ObservableObject {
         self.fusionEngine = fusionEngine
         self.motionService = motionService
         self.repository = repository
+        self.accessControl = accessControl
+        self.subscriptionService = subscriptionService
     }
 
     func beginChecklist() {
@@ -40,6 +46,17 @@ final class GoldScanViewModel: ObservableObject {
     func startScan() async {
         guard checklistComplete else {
             errorMessage = "Complete the pre-scan checklist first."
+            return
+        }
+        let access = accessControl.canStartScan(material: selectedMaterial)
+        guard access.allowed else {
+            errorMessage = access.reason
+            state = .failed
+            return
+        }
+        guard subscriptionService.canStartScan() else {
+            errorMessage = "Scan limit reached. Upgrade or request TestFlight access."
+            state = .failed
             return
         }
         guard deviceManager.batteryLevel >= BLEConstants.minimumBatteryPercent else {
@@ -103,6 +120,7 @@ final class GoldScanViewModel: ObservableObject {
                 result: result
             )
             try await repository.save(session: session)
+            subscriptionService.consumeScanIfNeeded()
             state = .completed
         } catch {
             errorMessage = error.localizedDescription

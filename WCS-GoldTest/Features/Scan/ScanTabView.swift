@@ -52,6 +52,11 @@ struct ScanRootView: View {
 
 struct ScanSetupView: View {
     @ObservedObject var viewModel: GoldScanViewModel
+    @EnvironmentObject private var dependencies: AppDependencies
+
+    private func materialEnabled(_ material: MaterialType) -> Bool {
+        dependencies.accessControl.canStartScan(material: material).allowed
+    }
 
     var body: some View {
         ScrollView {
@@ -66,6 +71,7 @@ struct ScanSetupView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .disabled(!materialEnabled(viewModel.selectedMaterial))
 
                 WCSCard {
                     VStack(alignment: .leading, spacing: 12) {

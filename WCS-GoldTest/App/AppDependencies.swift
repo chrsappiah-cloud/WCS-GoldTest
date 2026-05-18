@@ -18,6 +18,13 @@ final class AppDependencies: ObservableObject {
     let accuracyFusionEngine: AccuracyFusionEngine
     let motionStabilityService: MotionStabilityService
 
+    // MARK: - Access & administration
+
+    let accessRepository: LocalAccessPolicyRepository
+    let authSession: AuthSessionService
+    let accessControl: AccessControlService
+    let administration: AdministrationService
+
     // MARK: - Data
 
     let scanRepository: ScanRepository
@@ -56,7 +63,26 @@ final class AppDependencies: ObservableObject {
         self.deviceRepository = LocalDeviceRepository()
         self.reportRepository = LocalReportRepository()
         self.profileRepository = LocalProfileRepository()
+
+        self.accessRepository = LocalAccessPolicyRepository(modelContext: context)
+        try? accessRepository.seedIfNeeded()
+
+        self.authSession = AuthSessionService(repository: accessRepository)
+        self.accessControl = AccessControlService(auth: authSession, repository: accessRepository)
+        self.administration = AdministrationService(
+            repository: accessRepository,
+            accessControl: accessControl,
+            auth: authSession
+        )
         self.subscriptionService = SubscriptionService()
+        self.subscriptionService.bind(accessControl: accessControl)
+    }
+
+    func bootstrap() async {
+        await accessControl.reloadPolicies()
+        await authSession.restoreSession()
+        await administration.refresh()
+        subscriptionService.syncFromAccess()
     }
 
     func makeGoldScanViewModel() -> GoldScanViewModel {
@@ -66,7 +92,9 @@ final class AppDependencies: ObservableObject {
             rulesEngine: goldRulesEngine,
             fusionEngine: accuracyFusionEngine,
             motionService: motionStabilityService,
-            repository: scanRepository
+            repository: scanRepository,
+            accessControl: accessControl,
+            subscriptionService: subscriptionService
         )
     }
 
@@ -74,6 +102,8 @@ final class AppDependencies: ObservableObject {
         let schema = Schema([
             PersistedScanSession.self,
             PersistedVaultItem.self,
+            PersistedUserAccount.self,
+            PersistedEntitlementPolicy.self,
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {

@@ -6,11 +6,41 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Account & subscription") {
-                    LabeledContent("Plan", value: dependencies.subscriptionService.tier.rawValue.capitalized)
+                Section("Account & access") {
+                    NavigationLink {
+                        UserAccessView()
+                    } label: {
+                        Label("Sign in & entitlements", systemImage: "person.crop.circle")
+                    }
+                    LabeledContent("Plan", value: dependencies.subscriptionService.tier == .premium ? "Premium" : "Free")
+                    if dependencies.authSession.isAuthenticated,
+                       let user = dependencies.authSession.currentUser {
+                        LabeledContent("Signed in as", value: user.email)
+                    }
+                    NavigationLink {
+                        SubscriptionPaywallView()
+                    } label: {
+                        Label("Upgrade subscription", systemImage: "star.fill")
+                    }
                     Button("Restore purchases") {
                         Task { await dependencies.subscriptionService.refreshEntitlements() }
                     }
+                }
+
+                if dependencies.administration.canOpenAdminPanel {
+                    Section("Administration") {
+                        NavigationLink {
+                            AdminDashboardView()
+                        } label: {
+                            Label("Admin panel", systemImage: "shield.lefthalf.filled")
+                        }
+                    }
+                }
+
+                Section("App Store Connect") {
+                    LabeledContent("App ID", value: AppStoreConnect.appID)
+                    LabeledContent("Channel", value: AppConfiguration.detectedChannel.displayName)
+                    Link("Open in-flight version", destination: URL(string: "https://appstoreconnect.apple.com/apps/\(AppStoreConnect.appID)/distribution/ios/version/inflight")!)
                 }
 
                 Section("Device") {

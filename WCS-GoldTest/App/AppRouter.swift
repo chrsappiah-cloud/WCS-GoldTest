@@ -15,6 +15,9 @@ struct AppRouter: View {
         }
         .tint(WCSTheme.goldMid)
         .preferredColorScheme(.dark)
+        .task {
+            await dependencies.bootstrap()
+        }
     }
 }
 

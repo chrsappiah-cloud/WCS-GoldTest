@@ -3,11 +3,20 @@ import SwiftUI
 struct ReportsView: View {
     @EnvironmentObject private var dependencies: AppDependencies
     @State private var reports: [ReportRecord] = []
+    private var canUseReports: Bool {
+        dependencies.accessControl.canAccess(.pdfReports).allowed
+    }
 
     var body: some View {
         NavigationStack {
             Group {
-                if reports.isEmpty {
+                if !canUseReports {
+                    ContentUnavailableView(
+                        "Reports locked",
+                        systemImage: "lock.fill",
+                        description: Text(dependencies.accessControl.canAccess(.pdfReports).reason)
+                    )
+                } else if reports.isEmpty {
                     ContentUnavailableView(
                         "No reports yet",
                         systemImage: "doc.richtext",
