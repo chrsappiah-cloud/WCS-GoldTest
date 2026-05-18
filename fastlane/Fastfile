@@ -70,8 +70,8 @@ platform :ios do
       output_name: "WCS-GoldTest",
       clean: true,
       include_bitcode: false,
-      api_key: api_key,
-      xcargs: "-allowProvisioningUpdates"
+      export_team_id: ENV["DEVELOPMENT_TEAM_ID"] || "TM2WG7HH96",
+      xcargs: "-allowProvisioningUpdates DEVELOPMENT_TEAM=TM2WG7HH96"
     )
   end
 

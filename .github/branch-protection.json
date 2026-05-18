@@ -6,6 +6,7 @@
       "Build",
       "Unit Tests",
       "UI Tests",
+      "Release Compile Check",
       "Fastlane Test Lane"
     ]
   },

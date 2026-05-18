@@ -129,6 +129,37 @@ jobs:
             TestResults-UI.xcresult
             xcodebuild-ui.log
 
+  release-compile:
+    name: Release Compile Check
+    runs-on: macos-15
+    needs: build
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build Release (no code sign)
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project WCS-GoldTest.xcodeproj \
+            -scheme WCS-GoldTest \
+            -destination 'generic/platform=iOS' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee xcodebuild-release.log
+
+      - name: Upload release build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-release-log
+          path: xcodebuild-release.log
+
   fastlane-test:
     name: Fastlane Test Lane
     runs-on: macos-15
@@ -154,7 +185,7 @@ jobs:
   ci-gate:
     name: CI Gate
     runs-on: ubuntu-latest
-    needs: [build, unit-tests, ui-tests, fastlane-test]
+    needs: [build, unit-tests, ui-tests, release-compile, fastlane-test]
     if: always()
 
     steps:
@@ -163,11 +194,13 @@ jobs:
           if [[ "${{ needs.build.result }}" != "success" ]] \
             || [[ "${{ needs.unit-tests.result }}" != "success" ]] \
             || [[ "${{ needs.ui-tests.result }}" != "success" ]] \
+            || [[ "${{ needs.release-compile.result }}" != "success" ]] \
             || [[ "${{ needs.fastlane-test.result }}" != "success" ]]; then
             echo "One or more CI jobs failed."
             echo "build: ${{ needs.build.result }}"
             echo "unit-tests: ${{ needs.unit-tests.result }}"
             echo "ui-tests: ${{ needs.ui-tests.result }}"
+            echo "release-compile: ${{ needs.release-compile.result }}"
             echo "fastlane-test: ${{ needs.fastlane-test.result }}"
             exit 1
           fi

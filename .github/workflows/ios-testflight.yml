@@ -29,8 +29,6 @@ jobs:
     name: Build & Upload TestFlight
     runs-on: macos-15
     timeout-minutes: 90
-    environment: testflight
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,12 +66,15 @@ jobs:
           APP_STORE_CONNECT_API_KEY_IS_BASE64: "true"
           DEVELOPMENT_TEAM_ID: ${{ secrets.DEVELOPMENT_TEAM_ID }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
-          APP_STORE_CONNECT_TEAM_ID: ${{ secrets.APP_STORE_CONNECT_TEAM_ID }}
           TESTFLIGHT_CHANGELOG: ${{ github.event.inputs.changelog || 'Automated TestFlight build' }}
           DISTRIBUTE_EXTERNAL: ${{ github.event.inputs.distribute_external || 'false' }}
+          TESTFLIGHT_GROUPS: ${{ secrets.TESTFLIGHT_GROUPS || 'WCS Gold Internal' }}
           BUMP_BUILD: "true"
           SKIP_WAIT_FOR_PROCESSING: "true"
-        run: bundle exec fastlane ios beta
+          NOTIFY_EXTERNAL_TESTERS: ${{ github.event.inputs.distribute_external || 'false' }}
+        run: |
+          export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+          bundle exec fastlane ios beta
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4

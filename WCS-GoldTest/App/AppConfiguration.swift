@@ -27,7 +27,7 @@ struct AppConfiguration {
         return .appStore
     }
 
-    static var current: AppConfiguration {
+    nonisolated static var current: AppConfiguration {
         #if DEBUG
         return .debug
         #else
@@ -35,7 +35,7 @@ struct AppConfiguration {
         #endif
     }
 
-    static let debug = AppConfiguration(
+    nonisolated static let debug = AppConfiguration(
         environment: .debug,
         appStoreConnectAppID: AppStoreConnect.appID,
         supabaseURL: URL(string: ProcessInfo.processInfo.environment["SUPABASE_URL"] ?? ""),
@@ -44,7 +44,7 @@ struct AppConfiguration {
         useMockBLE: true
     )
 
-    static let release = AppConfiguration(
+    nonisolated static let release = AppConfiguration(
         environment: .release,
         appStoreConnectAppID: AppStoreConnect.appID,
         supabaseURL: nil,

@@ -1,0 +1,29 @@
+name: Enforce Branch Protection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/branch-protection.json"
+      - ".github/workflows/enforce-branch-protection.yml"
+      - "scripts/enforce-branch-protection.sh"
+
+permissions:
+  administration: write
+  contents: read
+
+jobs:
+  apply:
+    name: Apply main branch protection
+    runs-on: ubuntu-latest
+    if: github.repository == 'chrsappiah-cloud/WCS-GoldTest'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply protection rules
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash scripts/enforce-branch-protection.sh
