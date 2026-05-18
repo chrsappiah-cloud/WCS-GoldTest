@@ -8,7 +8,7 @@ struct TestFlightServiceTests {
 
     @Test func debugBuildIsNotTestFlight() {
         #if DEBUG
-        #expect(TestFlightService.isDebugBuild)
+        #expect(TestFlightDetector.isDebugBuild)
         #endif
     }
 }

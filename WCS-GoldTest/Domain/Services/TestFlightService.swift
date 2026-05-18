@@ -1,6 +1,22 @@
 import Combine
 import Foundation
 
+/// Nonisolated TestFlight detection for use from AppConfiguration and services.
+enum TestFlightDetector {
+    static func isTestFlightInstall() -> Bool {
+        guard let receiptURL = Bundle.main.appStoreReceiptURL else { return false }
+        return receiptURL.path.contains("sandboxReceipt")
+    }
+
+    static var isDebugBuild: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
+}
+
 /// TestFlight install detection and beta metadata for in-app UX.
 @MainActor
 final class TestFlightService: ObservableObject {
@@ -19,25 +35,11 @@ final class TestFlightService: ObservableObject {
     }
 
     func refresh() {
-        isTestFlightBuild = Self.detectTestFlightInstall()
-        isAppStoreBuild = !isTestFlightBuild && !Self.isDebugBuild
+        isTestFlightBuild = TestFlightDetector.isTestFlightInstall()
+        isAppStoreBuild = !isTestFlightBuild && !TestFlightDetector.isDebugBuild
         buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
         marketingVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
         bundleIdentifier = Bundle.main.bundleIdentifier ?? ""
-    }
-
-    /// Sandbox receipt indicates TestFlight or development App Store installs.
-    static func detectTestFlightInstall() -> Bool {
-        guard let receiptURL = Bundle.main.appStoreReceiptURL else { return false }
-        return receiptURL.path.contains("sandboxReceipt")
-    }
-
-    static var isDebugBuild: Bool {
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
     }
 
     /// Apply TestFlight channel defaults for newly registered users on beta builds.

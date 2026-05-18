@@ -63,7 +63,7 @@ final class AuthSessionService: ObservableObject {
                 lastError = "An account with this email already exists."
                 return false
             }
-            let channel: DistributionChannel = TestFlightService.detectTestFlightInstall()
+            let channel: DistributionChannel = TestFlightDetector.isTestFlightInstall()
                 ? .testFlight
                 : AppConfiguration.detectedChannel
             let user = ManagedUserAccount(

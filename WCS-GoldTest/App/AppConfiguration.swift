@@ -21,7 +21,7 @@ struct AppConfiguration {
             return .internalQA
         }
         #endif
-        if TestFlightService.detectTestFlightInstall() {
+        if TestFlightDetector.isTestFlightInstall() {
             return .testFlight
         }
         return .appStore

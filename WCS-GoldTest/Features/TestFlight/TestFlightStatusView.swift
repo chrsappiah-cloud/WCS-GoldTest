@@ -9,7 +9,7 @@ struct TestFlightStatusView: View {
                 if dependencies.testFlight.isTestFlightBuild {
                     Label("You are on a TestFlight beta build", systemImage: "airplane.circle.fill")
                         .foregroundStyle(WCSTheme.goldMid)
-                } else if TestFlightService.isDebugBuild {
+                } else if TestFlightDetector.isDebugBuild {
                     Label("Development build", systemImage: "hammer.fill")
                 } else {
                     Label("App Store build", systemImage: "bag.fill")
