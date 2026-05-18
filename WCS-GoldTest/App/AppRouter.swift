@@ -41,19 +41,25 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             HomeView()
+                .accessibilityIdentifier(AccessibilityID.Tab.home)
                 .tabItem { Label("Home", systemImage: "house") }
 
             ScanTabView()
+                .accessibilityIdentifier(AccessibilityID.Tab.scan)
                 .tabItem { Label("Scan", systemImage: "dot.radiowaves.left.and.right") }
 
             VaultView()
+                .accessibilityIdentifier(AccessibilityID.Tab.vault)
                 .tabItem { Label("Vault", systemImage: "tray.full") }
 
             ReportsView()
+                .accessibilityIdentifier(AccessibilityID.Tab.reports)
                 .tabItem { Label("Reports", systemImage: "doc.richtext") }
 
             SettingsView()
+                .accessibilityIdentifier(AccessibilityID.Tab.settings)
                 .tabItem { Label("Settings", systemImage: "gearshape") }
         }
+        .accessibilityElement(children: .contain)
     }
 }

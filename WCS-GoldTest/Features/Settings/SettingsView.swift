@@ -12,6 +12,7 @@ struct SettingsView: View {
                     } label: {
                         Label("Sign in & entitlements", systemImage: "person.crop.circle")
                     }
+                    .accessibilityIdentifier(AccessibilityID.Settings.accountAccess)
                     LabeledContent("Plan", value: dependencies.subscriptionService.tier == .premium ? "Premium" : "Free")
                     if dependencies.authSession.isAuthenticated,
                        let user = dependencies.authSession.currentUser {
@@ -22,9 +23,11 @@ struct SettingsView: View {
                     } label: {
                         Label("Upgrade subscription", systemImage: "star.fill")
                     }
+                    .accessibilityIdentifier(AccessibilityID.Settings.upgradeSubscription)
                     Button("Restore purchases") {
                         Task { await dependencies.subscriptionService.refreshEntitlements() }
                     }
+                    .accessibilityIdentifier(AccessibilityID.Settings.restorePurchases)
                 }
 
                 if dependencies.administration.canOpenAdminPanel {
@@ -34,6 +37,7 @@ struct SettingsView: View {
                         } label: {
                             Label("Admin panel", systemImage: "shield.lefthalf.filled")
                         }
+                        .accessibilityIdentifier(AccessibilityID.Settings.adminPanel)
                     }
                 }
 
@@ -69,6 +73,7 @@ struct SettingsView: View {
             .wcsLuxuryScreen()
             .scrollContentBackground(.hidden)
             .navigationTitle("Settings")
+            .accessibilityIdentifier(AccessibilityID.Settings.screen)
         }
     }
 }

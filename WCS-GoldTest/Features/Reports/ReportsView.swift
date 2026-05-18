@@ -30,6 +30,7 @@ struct ReportsView: View {
             }
             .wcsLuxuryScreen()
             .navigationTitle("Reports")
+            .accessibilityIdentifier(AccessibilityID.Reports.screen)
             .task {
                 reports = (try? await dependencies.reportRepository.fetchAll()) ?? []
             }

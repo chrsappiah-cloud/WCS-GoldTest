@@ -18,6 +18,7 @@ struct HomeView: View {
             .wcsLuxuryScreen()
             .navigationTitle("Home")
             .toolbarTitleDisplayMode(.large)
+            .accessibilityIdentifier(AccessibilityID.Home.screen)
         }
     }
 
@@ -84,6 +85,7 @@ struct HomeView: View {
             }
             .buttonStyle(.bordered)
             .tint(WCSTheme.goldMid)
+            .accessibilityIdentifier(AccessibilityID.Home.pairDevice)
 
             NavigationLink {
                 ReportsView()
@@ -94,6 +96,7 @@ struct HomeView: View {
             }
             .buttonStyle(.bordered)
             .tint(WCSTheme.diamondSpark)
+            .accessibilityIdentifier(AccessibilityID.Home.viewReports)
         }
     }
 

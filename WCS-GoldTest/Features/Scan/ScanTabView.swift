@@ -46,6 +46,7 @@ struct ScanRootView: View {
             }
             .navigationTitle("Scan")
             .wcsLuxuryScreen()
+            .accessibilityIdentifier(AccessibilityID.Scan.screen)
         }
     }
 }
@@ -78,6 +79,7 @@ struct ScanSetupView: View {
                         Text("Pre-scan checklist")
                             .font(.headline)
                         Toggle("Probe cleaned and seated", isOn: $viewModel.checklistComplete)
+                            .accessibilityIdentifier(AccessibilityID.Scan.checklistToggle)
                         Toggle("Item surface dry and accessible", isOn: .constant(true))
                         Toggle("Stable hand position", isOn: .constant(true))
                     }
@@ -93,7 +95,11 @@ struct ScanSetupView: View {
                         .foregroundStyle(.red)
                 }
 
-                WCSPrimaryButton("Start Gold Scan", systemImage: "dot.radiowaves.left.and.right") {
+                WCSPrimaryButton(
+                    "Start Gold Scan",
+                    systemImage: "dot.radiowaves.left.and.right",
+                    accessibilityIdentifier: AccessibilityID.Scan.startGoldScan
+                ) {
                     Task { await viewModel.startScan() }
                 }
                 .disabled(!viewModel.checklistComplete || viewModel.selectedMaterial != .gold)

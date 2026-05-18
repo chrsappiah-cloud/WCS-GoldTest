@@ -51,6 +51,16 @@ jobs:
             -only-testing:WCS-GoldTestTests \
             CODE_SIGNING_ALLOWED=NO
 
+      - name: Run UI tests
+        run: |
+          xcodebuild test \
+            -project WCS-GoldTest.xcodeproj \
+            -scheme WCS-GoldTest \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -configuration Debug \
+            -only-testing:WCS-GoldTestUITests \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: Upload build logs on failure
         if: failure()
         uses: actions/upload-artifact@v4

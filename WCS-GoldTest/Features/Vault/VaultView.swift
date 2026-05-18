@@ -34,7 +34,9 @@ struct VaultView: View {
             }
             .wcsLuxuryScreen()
             .navigationTitle("Vault")
+            .accessibilityIdentifier(AccessibilityID.Vault.screen)
             .searchable(text: $searchText, prompt: "Search vault")
+            .accessibilityIdentifier(AccessibilityID.Vault.search)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu("Filter") {

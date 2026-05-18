@@ -199,11 +199,18 @@ struct WCSCard<Content: View>: View {
 struct WCSPrimaryButton: View {
     let title: String
     let systemImage: String?
+    let accessibilityIdentifier: String?
     let action: () -> Void
 
-    init(_ title: String, systemImage: String? = nil, action: @escaping () -> Void) {
+    init(
+        _ title: String,
+        systemImage: String? = nil,
+        accessibilityIdentifier: String? = nil,
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.systemImage = systemImage
+        self.accessibilityIdentifier = accessibilityIdentifier
         self.action = action
     }
 
@@ -227,6 +234,7 @@ struct WCSPrimaryButton: View {
             .shadow(color: WCSTheme.goldDeep.opacity(0.35), radius: 8, y: 4)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityIdentifier ?? title)
     }
 }
 

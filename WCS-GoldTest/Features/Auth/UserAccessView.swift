@@ -53,6 +53,7 @@ struct UserAccessView: View {
                     dependencies.authSession.signOut()
                     dependencies.subscriptionService.syncFromAccess()
                 }
+                .accessibilityIdentifier(AccessibilityID.Auth.signOut)
             }
         }
     }
@@ -70,11 +71,15 @@ struct UserAccessView: View {
                     .textInputAutocapitalization(.never)
                     .keyboardType(.emailAddress)
                     .autocorrectionDisabled()
+                    .accessibilityIdentifier(AccessibilityID.Auth.email)
 
                 SecureField("Password", text: $password)
+                    .textContentType(.password)
+                    .accessibilityIdentifier(AccessibilityID.Auth.password)
 
                 if isRegistering {
                     TextField("Display name", text: $displayName)
+                        .accessibilityIdentifier(AccessibilityID.Auth.displayName)
                 }
 
                 if let error = dependencies.authSession.lastError {
@@ -83,7 +88,11 @@ struct UserAccessView: View {
                         .foregroundStyle(.red)
                 }
 
-                WCSPrimaryButton(isRegistering ? "Create account" : "Sign in", systemImage: "key.fill") {
+                WCSPrimaryButton(
+                    isRegistering ? "Create account" : "Sign in",
+                    systemImage: "key.fill",
+                    accessibilityIdentifier: isRegistering ? AccessibilityID.Auth.signUp : AccessibilityID.Auth.signIn
+                ) {
                     Task {
                         if isRegistering {
                             _ = await dependencies.authSession.signUp(

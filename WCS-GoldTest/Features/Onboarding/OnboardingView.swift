@@ -46,7 +46,13 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page)
 
-            WCSPrimaryButton(page < pages.count - 1 ? "Continue" : "Get started", systemImage: "arrow.right") {
+            WCSPrimaryButton(
+                page < pages.count - 1 ? "Continue" : "Get started",
+                systemImage: "arrow.right",
+                accessibilityIdentifier: page < pages.count - 1
+                    ? AccessibilityID.Onboarding.continueButton
+                    : AccessibilityID.Onboarding.getStarted
+            ) {
                 if page < pages.count - 1 {
                     page += 1
                 } else {
@@ -58,9 +64,11 @@ struct OnboardingView: View {
             Button("Skip") { onComplete() }
                 .font(.footnote)
                 .foregroundStyle(WCSTheme.secondaryText)
+                .accessibilityIdentifier(AccessibilityID.Onboarding.skip)
         }
         .padding(.vertical)
         .wcsLuxuryScreen()
+        .accessibilityIdentifier(AccessibilityID.Onboarding.container)
     }
 }
 

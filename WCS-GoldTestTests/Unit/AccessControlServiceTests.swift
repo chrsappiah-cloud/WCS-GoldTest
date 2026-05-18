@@ -2,13 +2,11 @@ import SwiftData
 import Testing
 @testable import WCS_GoldTest
 
+#if targetEnvironment(simulator)
 @MainActor
 struct AccessControlServiceTests {
     @Test func adminCanAccessAdminPanel() async throws {
-        let container = try ModelContainer(
-            for: PersistedUserAccount.self, PersistedEntitlementPolicy.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
+        let container = try TestModelContainer.make()
         let repo = LocalAccessPolicyRepository(modelContext: container.mainContext)
         try repo.seedIfNeeded()
         let auth = AuthSessionService(repository: repo)
@@ -20,10 +18,7 @@ struct AccessControlServiceTests {
     }
 
     @Test func guestCannotAccessPdfReports() async throws {
-        let container = try ModelContainer(
-            for: PersistedUserAccount.self, PersistedEntitlementPolicy.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
+        let container = try TestModelContainer.make()
         let repo = LocalAccessPolicyRepository(modelContext: container.mainContext)
         try repo.seedIfNeeded()
         let auth = AuthSessionService(repository: repo)
@@ -33,3 +28,4 @@ struct AccessControlServiceTests {
         #expect(!decision.allowed)
     }
 }
+#endif

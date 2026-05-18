@@ -19,16 +19,19 @@ struct AdminDashboardView: View {
                 } label: {
                     Label("User access control", systemImage: "person.3.fill")
                 }
+                .accessibilityIdentifier(AccessibilityID.Admin.users)
                 NavigationLink {
                     AdminEntitlementsView()
                 } label: {
                     Label("Feature entitlements by plan", systemImage: "switch.2")
                 }
+                .accessibilityIdentifier(AccessibilityID.Admin.entitlements)
                 NavigationLink {
                     AdminTestFlightView()
                 } label: {
                     Label("TestFlight & subscriptions", systemImage: "airplane")
                 }
+                .accessibilityIdentifier(AccessibilityID.Admin.testFlight)
             }
 
             if let message = dependencies.administration.operationMessage {
@@ -42,6 +45,7 @@ struct AdminDashboardView: View {
         .scrollContentBackground(.hidden)
         .wcsLuxuryScreen()
         .navigationTitle("Administration")
+        .accessibilityIdentifier(AccessibilityID.Admin.dashboard)
         .task {
             await dependencies.administration.refresh()
         }

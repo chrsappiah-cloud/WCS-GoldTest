@@ -57,7 +57,7 @@ final class AppDependencies: ObservableObject {
         self.accuracyFusionEngine = AccuracyFusionEngine()
         self.motionStabilityService = MotionStabilityService()
 
-        self.modelContainer = Self.makeModelContainer()
+        self.modelContainer = Self.makeModelContainer(inMemory: UITestLaunch.useInMemoryStore)
         let context = modelContainer.mainContext
         self.scanRepository = LocalScanRepository(modelContext: context)
         self.deviceRepository = LocalDeviceRepository()
@@ -98,14 +98,18 @@ final class AppDependencies: ObservableObject {
         )
     }
 
-    private static func makeModelContainer() -> ModelContainer {
+    private static func makeModelContainer(inMemory: Bool = false) -> ModelContainer {
         let schema = Schema([
             PersistedScanSession.self,
             PersistedVaultItem.self,
             PersistedUserAccount.self,
             PersistedEntitlementPolicy.self,
         ])
-        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let config = ModelConfiguration(
+            inMemory ? "UITestStore" : "AppStore",
+            schema: schema,
+            isStoredInMemoryOnly: inMemory
+        )
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
