@@ -19,8 +19,20 @@ enum AccessibilityID {
 
     enum Home {
         static let screen = "home.screen"
+        static let newGoldScan = "home.newGoldScan"
         static let pairDevice = "home.pairDevice"
         static let viewReports = "home.viewReports"
+    }
+
+    enum Pairing {
+        static let screen = "pairing.screen"
+        static func deviceRow(_ id: UUID) -> String { "pairing.device.\(id.uuidString)" }
+    }
+
+    enum Firmware {
+        static let screen = "firmware.screen"
+        static let activate = "firmware.activate"
+        static let pairFirst = "firmware.pairFirst"
     }
 
     enum Scan {
@@ -46,6 +58,9 @@ enum AccessibilityID {
         static let restorePurchases = "settings.restorePurchases"
         static let upgradeSubscription = "settings.upgradeSubscription"
         static let testFlightStatus = "settings.testFlightStatus"
+        static let firmware = "settings.firmware"
+        static let calibration = "settings.calibration"
+        static let pairProbe = "settings.pairProbe"
     }
 
     enum Auth {

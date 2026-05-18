@@ -35,13 +35,25 @@ struct AppConfiguration {
         #endif
     }
 
+    /// Mock BLE in Simulator; real CoreBluetooth on physical devices. Override with launch args.
+    nonisolated static var prefersMockBLE: Bool {
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("-realBLE") { return false }
+        if args.contains("-mockBLE") { return true }
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return false
+        #endif
+    }
+
     nonisolated static let debug = AppConfiguration(
         environment: .debug,
         appStoreConnectAppID: AppStoreConnect.appID,
         supabaseURL: URL(string: ProcessInfo.processInfo.environment["SUPABASE_URL"] ?? ""),
         supabaseAnonKey: ProcessInfo.processInfo.environment["SUPABASE_ANON_KEY"],
         metalsAPIKey: ProcessInfo.processInfo.environment["METALS_API_KEY"],
-        useMockBLE: true
+        useMockBLE: prefersMockBLE
     )
 
     nonisolated static let release = AppConfiguration(
@@ -50,6 +62,6 @@ struct AppConfiguration {
         supabaseURL: nil,
         supabaseAnonKey: nil,
         metalsAPIKey: nil,
-        useMockBLE: false
+        useMockBLE: prefersMockBLE
     )
 }

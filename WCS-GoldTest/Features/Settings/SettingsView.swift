@@ -66,13 +66,24 @@ struct SettingsView: View {
                 }
 
                 Section("Device") {
-                    NavigationLink("Firmware") {
-                        Text("Firmware \(dependencies.bleDeviceManager.firmwareVersion)")
-                            .navigationTitle("Firmware")
+                    NavigationLink {
+                        FirmwareView()
+                    } label: {
+                        Label("Firmware", systemImage: "cpu")
                     }
-                    NavigationLink("Calibration profiles") {
+                    .accessibilityIdentifier(AccessibilityID.Settings.firmware)
+                    NavigationLink {
                         CalibrationProfilesPlaceholderView()
+                    } label: {
+                        Label("Calibration profiles", systemImage: "slider.horizontal.3")
                     }
+                    .accessibilityIdentifier(AccessibilityID.Settings.calibration)
+                    NavigationLink {
+                        PairingView()
+                    } label: {
+                        Label("Pair probe", systemImage: "link")
+                    }
+                    .accessibilityIdentifier(AccessibilityID.Settings.pairProbe)
                 }
 
                 Section("Preferences") {

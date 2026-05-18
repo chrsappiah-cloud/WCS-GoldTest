@@ -3,22 +3,36 @@ import Foundation
 
 @MainActor
 final class MockDeviceTransport: DeviceTransporting {
+    /// Stable ID shown in Pairing when running in the simulator.
+    static let simulatorProbeID = UUID(uuidString: "A1B2C3D4-E5F6-7890-ABCD-EF1234567890")!
+
     @Published private(set) var isConnected = false
     private var streamTask: Task<Void, Never>?
+    weak var deviceManager: BLEDeviceManager?
 
     func startScan() {}
 
     func connect(to peripheralID: UUID) async throws {
         try await Task.sleep(for: .milliseconds(400))
         isConnected = true
+        deviceManager?.noteConnected(peripheralID: peripheralID)
+        deviceManager?.applySimulatedProbeDefaults()
     }
 
     func send(_ command: DeviceCommand) async throws {
         guard isConnected else { throw BLEServiceError.notConnected }
+        guard let manager = deviceManager else { return }
         switch command {
         case .startMeasurement:
             break
-        default:
+        case .requestFirmwareVersion:
+            manager.applyFirmware(FirmwareInfo.simulatorDefault)
+        case .requestBattery:
+            manager.updateBatteryLevel(87)
+        case .stopMeasurement:
+            streamTask?.cancel()
+            streamTask = nil
+        case .beginCalibration:
             break
         }
     }
@@ -27,6 +41,7 @@ final class MockDeviceTransport: DeviceTransporting {
         streamTask?.cancel()
         streamTask = nil
         isConnected = false
+        deviceManager?.noteDisconnected()
     }
 
     func simulateMeasurementStream(into manager: BLEDeviceManager) {

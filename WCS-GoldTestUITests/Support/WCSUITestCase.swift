@@ -6,7 +6,7 @@ class WCSUITestCase: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments += ["-ui-testing", "-skipOnboarding", "-inMemoryStore"]
+        app.launchArguments += ["-ui-testing", "-skipOnboarding", "-inMemoryStore", "-mockBLE"]
         app.launch()
         XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15))
         _ = app.tabBars.buttons["Home"].waitForExistence(timeout: 5)

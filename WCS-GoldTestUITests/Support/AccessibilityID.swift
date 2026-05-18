@@ -17,8 +17,13 @@ enum AccessibilityID {
     }
 
     enum Home {
+        static let newGoldScan = "home.newGoldScan"
         static let pairDevice = "home.pairDevice"
         static let viewReports = "home.viewReports"
+    }
+
+    enum Firmware {
+        static let activate = "firmware.activate"
     }
 
     enum Scan {
@@ -31,6 +36,10 @@ enum AccessibilityID {
         static let adminPanel = "settings.adminPanel"
         static let restorePurchases = "settings.restorePurchases"
         static let upgradeSubscription = "settings.upgradeSubscription"
+        static let testFlightStatus = "settings.testFlightStatus"
+        static let firmware = "settings.firmware"
+        static let calibration = "settings.calibration"
+        static let pairProbe = "settings.pairProbe"
     }
 
     enum Auth {

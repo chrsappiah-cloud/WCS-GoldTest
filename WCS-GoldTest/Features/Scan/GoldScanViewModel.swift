@@ -59,6 +59,11 @@ final class GoldScanViewModel: ObservableObject {
             state = .failed
             return
         }
+        guard deviceManager.isFirmwareActive else {
+            errorMessage = "Activate firmware on your probe before scanning (Settings → Firmware)."
+            state = .failed
+            return
+        }
         guard deviceManager.batteryLevel >= BLEConstants.minimumBatteryPercent else {
             errorMessage = "Battery too low for a safe scan."
             state = .failed
@@ -73,7 +78,11 @@ final class GoldScanViewModel: ObservableObject {
 
         do {
             if !deviceManager.isConnected {
-                try await deviceManager.connect(to: UUID())
+                let target = mockTransport != nil
+                    ? MockDeviceTransport.simulatorProbeID
+                    : (deviceManager.discoveredPeripheralIDs.first ?? MockDeviceTransport.simulatorProbeID)
+                try await deviceManager.connect(to: target)
+                await deviceManager.activateFirmware()
             }
 
             try await deviceManager.send(.startMeasurement(material: selectedMaterial))

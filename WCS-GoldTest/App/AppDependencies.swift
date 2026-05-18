@@ -86,6 +86,21 @@ final class AppDependencies: ObservableObject {
         await authSession.restoreSession()
         await administration.refresh()
         subscriptionService.syncFromAccess()
+        await prepareDeviceForTesting()
+    }
+
+    /// Auto-pair simulator probe and activate firmware for mock builds.
+    func prepareDeviceForTesting() async {
+        guard configuration.useMockBLE else {
+            bleDeviceManager.startScan()
+            return
+        }
+        bleDeviceManager.startScan()
+        let probeID = MockDeviceTransport.simulatorProbeID
+        if !bleDeviceManager.isConnected {
+            try? await bleDeviceManager.connect(to: probeID)
+        }
+        await bleDeviceManager.activateFirmware()
     }
 
     func makeGoldScanViewModel() -> GoldScanViewModel {

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var dependencies: AppDependencies
+    @Binding var selectedTab: AppTab
 
     var body: some View {
         NavigationStack {
@@ -52,9 +53,16 @@ struct HomeView: View {
                     Text("Battery \(dependencies.bleDeviceManager.batteryLevel)%")
                         .foregroundStyle(.secondary)
                 }
-                Text("Firmware \(dependencies.bleDeviceManager.firmwareVersion)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text("Firmware \(dependencies.bleDeviceManager.firmwareVersion)")
+                    if dependencies.bleDeviceManager.isFirmwareActive {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(.green)
+                            .accessibilityLabel("Firmware active")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
         }
     }
@@ -75,7 +83,10 @@ struct HomeView: View {
 
     private var quickActions: some View {
         VStack(spacing: 12) {
-            WCSPrimaryButton("New Gold Scan", systemImage: "dot.radiowaves.left.and.right") {}
+            WCSPrimaryButton("New Gold Scan", systemImage: "dot.radiowaves.left.and.right") {
+                selectedTab = .scan
+            }
+            .accessibilityIdentifier(AccessibilityID.Home.newGoldScan)
             NavigationLink {
                 PairingView()
             } label: {
@@ -117,6 +128,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(selectedTab: .constant(.home))
         .environmentObject(AppDependencies())
 }
