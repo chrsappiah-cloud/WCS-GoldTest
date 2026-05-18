@@ -45,6 +45,7 @@ enum AccessibilityID {
         static let adminPanel = "settings.adminPanel"
         static let restorePurchases = "settings.restorePurchases"
         static let upgradeSubscription = "settings.upgradeSubscription"
+        static let testFlightStatus = "settings.testFlightStatus"
     }
 
     enum Auth {

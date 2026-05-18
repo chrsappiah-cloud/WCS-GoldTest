@@ -41,9 +41,27 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("TestFlight") {
+                    NavigationLink {
+                        TestFlightStatusView()
+                    } label: {
+                        Label("Beta build status", systemImage: "airplane")
+                    }
+                    .accessibilityIdentifier(AccessibilityID.Settings.testFlightStatus)
+
+                    if dependencies.testFlight.isTestFlightBuild {
+                        Label("Running TestFlight beta", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                            .font(.caption)
+                    }
+
+                    Link("Open TestFlight in App Store Connect", destination: dependencies.testFlight.appStoreConnectTestFlightURL)
+                }
+
                 Section("App Store Connect") {
                     LabeledContent("App ID", value: AppStoreConnect.appID)
                     LabeledContent("Channel", value: AppConfiguration.detectedChannel.displayName)
+                    LabeledContent("Build", value: "\(dependencies.testFlight.marketingVersion) (\(dependencies.testFlight.buildNumber))")
                     Link("Open in-flight version", destination: URL(string: "https://appstoreconnect.apple.com/apps/\(AppStoreConnect.appID)/distribution/ios/version/inflight")!)
                 }
 

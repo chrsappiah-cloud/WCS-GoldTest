@@ -21,7 +21,7 @@ struct AppConfiguration {
             return .internalQA
         }
         #endif
-        if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+        if TestFlightService.detectTestFlightInstall() {
             return .testFlight
         }
         return .appStore

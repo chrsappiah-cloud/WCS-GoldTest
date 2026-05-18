@@ -1,0 +1,10 @@
+app_identifier("wcs.WCS-GoldTest")
+apple_id(ENV["APPLE_ID"]) # Apple Developer account email
+itc_team_id(ENV["APP_STORE_CONNECT_TEAM_ID"])
+team_id(ENV["DEVELOPMENT_TEAM_ID"] || "TM2WG7HH96")
+
+# App Store Connect app Apple ID (numeric) — WCS Gold Test
+# https://appstoreconnect.apple.com/apps/6770415355
+for_platform(:ios) do
+  app_identifier("wcs.WCS-GoldTest")
+end

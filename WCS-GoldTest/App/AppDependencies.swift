@@ -32,6 +32,7 @@ final class AppDependencies: ObservableObject {
     let reportRepository: ReportRepository
     let profileRepository: ProfileRepository
     let subscriptionService: SubscriptionService
+    let testFlight: TestFlightService
 
     // MARK: - Persistence
 
@@ -76,6 +77,8 @@ final class AppDependencies: ObservableObject {
         )
         self.subscriptionService = SubscriptionService()
         self.subscriptionService.bind(accessControl: accessControl)
+        self.testFlight = TestFlightService()
+        self.testFlight.refresh()
     }
 
     func bootstrap() async {

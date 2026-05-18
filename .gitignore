@@ -8,6 +8,15 @@ xcuserdata/
 
 # Secrets
 Config/Secrets.xcconfig
+fastlane/.env
+fastlane/report.xml
+fastlane/test_output/
+
+# Build / Fastlane
+build/
+*.ipa
+*.dSYM.zip
+vendor/bundle/
 
 # macOS
 .DS_Store

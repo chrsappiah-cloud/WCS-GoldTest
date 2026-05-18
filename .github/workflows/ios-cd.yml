@@ -50,7 +50,7 @@ jobs:
           path: |
             marketing-bundle.zip
 
-      # TestFlight upload: add App Store Connect API key secrets and fastlane lane in phase 2
-      - name: CD placeholder — TestFlight
+      - name: TestFlight upload pointer
         run: |
-          echo "Configure APP_STORE_CONNECT_* secrets and fastlane for TestFlight upload."
+          echo "For TestFlight uploads use the 'TestFlight' workflow or: bundle exec fastlane ios beta"
+          echo "App Store Connect: https://appstoreconnect.apple.com/apps/6770415355/testflight"
