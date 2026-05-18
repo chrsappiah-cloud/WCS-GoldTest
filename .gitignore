@@ -1,0 +1,13 @@
+# IDE
+.idea/
+
+# Xcode
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Secrets
+Config/Secrets.xcconfig
+
+# macOS
+.DS_Store

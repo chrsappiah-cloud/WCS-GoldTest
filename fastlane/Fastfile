@@ -1,0 +1,26 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Run unit tests"
+  lane :test do
+    run_tests(
+      project: "WCS-GoldTest.xcodeproj",
+      scheme: "WCS-GoldTest",
+      device: "iPhone 16",
+      code_coverage: true
+    )
+  end
+
+  desc "Build for CI (no signing)"
+  lane :ci_build do
+    build_app(
+      project: "WCS-GoldTest.xcodeproj",
+      scheme: "WCS-GoldTest",
+      skip_codesigning: true,
+      skip_archive: true,
+      destination: "generic/platform=iOS Simulator"
+    )
+  end
+
+  # lane :beta requires match + App Store Connect API key
+end

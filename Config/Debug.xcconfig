@@ -1,0 +1,7 @@
+// Debug — copy Config/Secrets.xcconfig.example to Config/Secrets.xcconfig for local keys.
+#include? "Secrets.xcconfig"
+
+SUPABASE_URL =
+SUPABASE_ANON_KEY =
+METALS_API_KEY =
+USE_MOCK_BLE = YES

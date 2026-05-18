@@ -1,0 +1,56 @@
+name: iOS CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: Build configuration
+        required: true
+        default: Release
+        type: choice
+        options:
+          - Release
+          - Debug
+
+jobs:
+  release-build:
+    name: Release Archive
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build Release for Simulator (artifact)
+        run: |
+          CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
+          xcodebuild build \
+            -project WCS-GoldTest.xcodeproj \
+            -scheme WCS-GoldTest \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration "$CONFIG" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Archive marketing assets
+        run: |
+          cd Marketing
+          zip -r ../marketing-bundle.zip images investor-deck.html
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wcs-goldtest-release-${{ github.sha }}
+          path: |
+            marketing-bundle.zip
+
+      # TestFlight upload: add App Store Connect API key secrets and fastlane lane in phase 2
+      - name: CD placeholder — TestFlight
+        run: |
+          echo "Configure APP_STORE_CONNECT_* secrets and fastlane for TestFlight upload."

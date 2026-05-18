@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCS Gold Test — Investor Deck</title>
+  <style>
+    @page { size: landscape; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0a0a0f;
+      color: #f5f0e8;
+    }
+    .slide {
+      min-height: 100vh;
+      padding: 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      page-break-after: always;
+      background: linear-gradient(145deg, #0a0a0f 0%, #14141c 40%, #1a1520 100%);
+      border-bottom: 1px solid rgba(212, 175, 85, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(212,175,85,0.12), transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(180,210,255,0.08), transparent 45%);
+      pointer-events: none;
+    }
+    .slide > * { position: relative; z-index: 1; }
+    h1 {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #fff8dc, #d4af55, #8b6914);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    h2 { font-size: 2rem; color: #d4af55; margin-bottom: 1rem; }
+    p, li { font-size: 1.25rem; line-height: 1.6; color: #c8c0b8; max-width: 52rem; }
+    ul { margin: 1rem 0 0 1.5rem; }
+    .tagline { font-size: 1.5rem; color: #b8d4f0; margin-bottom: 2rem; }
+    .hero-img, .feature-img {
+      max-width: 100%;
+      max-height: 42vh;
+      border-radius: 16px;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(212, 175, 85, 0.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,85,0.15);
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+    .metric { font-size: 2.5rem; font-weight: 700; color: #d4af55; }
+    .footer { font-size: 0.9rem; color: #666; margin-top: auto; padding-top: 2rem; }
+    .diamond { color: #b8d4f0; }
+    @media print {
+      .slide { min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page 1: Cover -->
+  <section class="slide">
+    <p class="tagline">Connected precious-metal screening · iOS + BLE hardware</p>
+    <h1>WCS Gold Test</h1>
+    <p>Estimate likely gold purity ranges at home with guided scans, vault history, and investor-ready reporting.</p>
+    <img class="hero-img" src="images/promo-hero.png" alt="WCS Gold Test promotional hero" />
+    <p class="footer">Confidential — for investor review · Screening estimates, not laboratory certification</p>
+  </section>
+
+  <!-- Page 2: Problem -->
+  <section class="slide">
+    <h2>The problem</h2>
+    <ul>
+      <li>Consumers cannot verify gold jewelry purity without costly lab assay.</li>
+      <li>Camera-only apps overclaim accuracy and erode trust.</li>
+      <li>Dealers and resellers need fast, documented screening workflows.</li>
+    </ul>
+    <p style="margin-top:2rem">WCS pairs a dedicated BLE probe with a premium iOS experience — hardware creates the signal; software creates the workflow, history, and monetization.</p>
+  </section>
+
+  <!-- Page 3: Solution (feature image 1) -->
+  <section class="slide">
+    <div class="grid-2">
+      <div>
+        <h2>Gold scan workflow</h2>
+        <p>Guided checklist, live signal chart, fusion-based confidence scoring, and clear legal framing as <em>screening estimates</em>.</p>
+        <ul>
+          <li>Material selector: gold, diamond, gemstone</li>
+          <li>Motion stability + calibration freshness inputs</li>
+          <li>Offline-first with local SwiftData vault</li>
+        </ul>
+      </div>
+      <img class="feature-img" src="images/feature-gold-scan.png" alt="Gold scan feature" />
+    </div>
+  </section>
+
+  <!-- Page 4: Hardware + BLE (feature image 2) -->
+  <section class="slide">
+    <div class="grid-2">
+      <img class="feature-img" src="images/feature-pairing.png" alt="Device pairing" />
+      <div>
+        <h2>BLE probe & pairing</h2>
+        <p>CoreBluetooth integration with command, telemetry, battery, firmware, and config characteristics.</p>
+        <ul>
+          <li>Simulator-safe mocks for rapid UI iteration</li>
+          <li>Reconnection and calibration gating before scans</li>
+          <li>Firmware manifest path for OTA updates (phase 3)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 5: Vault (feature image 3) -->
+  <section class="slide">
+    <div class="grid-2">
+      <div>
+        <h2>Vault & search</h2>
+        <p>Persistent scan history with purity, karat, confidence, and filters — the retention layer for subscription value.</p>
+      </div>
+      <img class="feature-img" src="images/feature-vault.png" alt="Vault feature" />
+    </div>
+  </section>
+
+  <!-- Page 6: Reports (feature image 4) -->
+  <section class="slide">
+    <div class="grid-2">
+      <div>
+        <h2>Reports & certificates</h2>
+        <p>PDF screening summaries via Supabase edge functions — disclaimers, device ID, calibration timestamp, share sheet export.</p>
+      </div>
+      <img class="feature-img" src="images/feature-reports.png" alt="Reports feature" />
+    </div>
+  </section>
+
+  <!-- Page 7: Premium (feature image 5) -->
+  <section class="slide">
+    <div class="grid-2">
+      <img class="feature-img" src="images/feature-premium.png" alt="Premium subscription" />
+      <div>
+        <h2>Monetization</h2>
+        <p><span class="metric">Hardware + subscription</span></p>
+        <ul>
+          <li>Free tier: limited scans</li>
+          <li>Premium: unlimited scans, cloud sync, PDF reports, diagnostics history</li>
+          <li>StoreKit 2 + backend entitlement validation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 8: Technology -->
+  <section class="slide">
+    <h2>Technology stack</h2>
+    <ul>
+      <li><strong>iOS 18+</strong> SwiftUI, MVVM, SwiftData, CoreBluetooth, CoreMotion, CloudKit</li>
+      <li><strong>Backend</strong> Supabase (auth, Postgres, storage, edge functions)</li>
+      <li><strong>Accuracy layer</strong> Multi-source fusion: probe, motion, calibration, cloud consensus</li>
+      <li><strong>CI/CD</strong> GitHub Actions — build, test, TestFlight-ready artifacts</li>
+    </ul>
+  </section>
+
+  <!-- Page 9: Roadmap -->
+  <section class="slide">
+    <h2>Roadmap</h2>
+    <ul>
+      <li><strong>Phase 1</strong> — App shell, mock BLE, gold scan, local persistence ✓</li>
+      <li><strong>Phase 2</strong> — Supabase sync, calibration UI, reports, StoreKit paywall</li>
+      <li><strong>Phase 3</strong> — Firmware OTA, diamond module, admin analytics</li>
+      <li><strong>Calibration</strong> — Lab-certified reference curves replace placeholder thresholds</li>
+    </ul>
+    <p style="margin-top:2rem">Private TestFlight pilot with hardware BOM validation targeted post Supabase stand-up.</p>
+  </section>
+
+  <!-- Page 10: Ask -->
+  <section class="slide">
+    <h1>Investment opportunity</h1>
+    <p class="tagline">Defensible hardware signal · recurring app revenue · regulated claims language</p>
+    <ul>
+      <li>Finalize gold probe industrial design & calibration dataset</li>
+      <li>Scale TestFlight pilot → App Store launch</li>
+      <li>Expand gem modules and pro XRF import bridge</li>
+    </ul>
+    <p style="margin-top:2rem;font-size:1.5rem;color:#d4af55">Contact: WCS Precious Test · wcs.WCS-GoldTest</p>
+    <img class="hero-img" src="images/promo-hero.png" alt="WCS promotional" style="max-height:28vh;margin-top:1rem" />
+    <p class="footer"><span class="diamond">◆</span> Screening estimates only — not accredited laboratory certification</p>
+  </section>
+
+</body>
+</html>

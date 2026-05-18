@@ -1,0 +1,6 @@
+#include? "Secrets.xcconfig"
+
+SUPABASE_URL =
+SUPABASE_ANON_KEY =
+METALS_API_KEY =
+USE_MOCK_BLE = NO
