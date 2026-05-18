@@ -3,7 +3,7 @@ name: iOS CD
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
     inputs:
       configuration:
@@ -15,11 +15,18 @@ on:
           - Release
           - Debug
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-cd-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release-build:
-    name: Release Archive
+    name: Release Build
     runs-on: macos-15
-    timeout-minutes: 60
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -28,7 +35,7 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
-      - name: Build Release for Simulator (artifact)
+      - name: Build Release for Simulator
         run: |
           CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
           xcodebuild build \
@@ -47,10 +54,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wcs-goldtest-release-${{ github.sha }}
-          path: |
-            marketing-bundle.zip
+          path: marketing-bundle.zip
 
-      - name: TestFlight upload pointer
+      - name: TestFlight pointer
         run: |
-          echo "For TestFlight uploads use the 'TestFlight' workflow or: bundle exec fastlane ios beta"
-          echo "App Store Connect: https://appstoreconnect.apple.com/apps/6770415355/testflight"
+          echo "For TestFlight uploads run the 'TestFlight' workflow."
+          echo "https://appstoreconnect.apple.com/apps/6770415355/testflight"

@@ -17,6 +17,7 @@ build/
 *.ipa
 *.dSYM.zip
 vendor/bundle/
+TestResults*.xcresult/
 
 # macOS
 .DS_Store
