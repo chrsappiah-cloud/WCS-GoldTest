@@ -10,8 +10,7 @@ on:
       - "scripts/enforce-branch-protection.sh"
 
 permissions:
-  administration: write
-  contents: read
+  contents: write
 
 jobs:
   apply:
