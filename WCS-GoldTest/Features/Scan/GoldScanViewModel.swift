@@ -6,6 +6,8 @@ final class GoldScanViewModel: ObservableObject {
     @Published var state: ScanViewState = .idle
     @Published var selectedMaterial: MaterialType = .gold
     @Published var checklistComplete = false
+    @Published var surfaceDryAccessible = false
+    @Published var stableHandPosition = false
     @Published var liveSignal: [Double] = []
     @Published var result: ScanResult?
     @Published var errorMessage: String?
@@ -44,8 +46,8 @@ final class GoldScanViewModel: ObservableObject {
     }
 
     func startScan() async {
-        guard checklistComplete else {
-            errorMessage = "Complete the pre-scan checklist first."
+        guard checklistComplete, surfaceDryAccessible, stableHandPosition else {
+            errorMessage = "Complete all pre-scan checklist items."
             return
         }
         let access = accessControl.canStartScan(material: selectedMaterial)

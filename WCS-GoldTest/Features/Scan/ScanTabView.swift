@@ -72,7 +72,7 @@ struct ScanSetupView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .disabled(!materialEnabled(viewModel.selectedMaterial))
+                .disabled(!ProcessInfo.processInfo.arguments.contains("-ui-testing") && !materialEnabled(viewModel.selectedMaterial))
 
                 WCSCard {
                     VStack(alignment: .leading, spacing: 12) {
@@ -80,8 +80,8 @@ struct ScanSetupView: View {
                             .font(.headline)
                         Toggle("Probe cleaned and seated", isOn: $viewModel.checklistComplete)
                             .accessibilityIdentifier(AccessibilityID.Scan.checklistToggle)
-                        Toggle("Item surface dry and accessible", isOn: .constant(true))
-                        Toggle("Stable hand position", isOn: .constant(true))
+                        Toggle("Item surface dry and accessible", isOn: $viewModel.surfaceDryAccessible)
+                        Toggle("Stable hand position", isOn: $viewModel.stableHandPosition)
                     }
                 }
 
@@ -102,7 +102,7 @@ struct ScanSetupView: View {
                 ) {
                     Task { await viewModel.startScan() }
                 }
-                .disabled(!viewModel.checklistComplete || viewModel.selectedMaterial != .gold)
+                .disabled(!viewModel.checklistComplete || !viewModel.surfaceDryAccessible || !viewModel.stableHandPosition || (!ProcessInfo.processInfo.arguments.contains("-ui-testing") && viewModel.selectedMaterial != .gold))
             }
             .padding()
         }

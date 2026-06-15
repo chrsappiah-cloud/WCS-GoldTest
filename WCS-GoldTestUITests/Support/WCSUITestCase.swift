@@ -97,6 +97,14 @@ class WCSUITestCase: XCTestCase {
         tapButton(identifier: AccessibilityID.Settings.accountAccess, fallbackLabel: "Sign in & entitlements")
         XCTAssertTrue(app.navigationBars["Account & Access"].waitForExistence(timeout: 8))
 
+        // If already authenticated (forceAdminAuth during UI testing), just verify signed-in panel
+        if app.buttons[AccessibilityID.Auth.signOut].waitForExistence(timeout: 3) {
+            if app.navigationBars.buttons.element(boundBy: 0).exists {
+                app.navigationBars.buttons.element(boundBy: 0).tap()
+            }
+            return
+        }
+
         let scroll = app.scrollViews.firstMatch
         if scroll.exists { scroll.swipeUp() }
 

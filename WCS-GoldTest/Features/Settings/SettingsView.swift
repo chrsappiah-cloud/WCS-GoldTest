@@ -87,9 +87,10 @@ struct SettingsView: View {
                 }
 
                 Section("Preferences") {
-                    NavigationLink("Units & region") {
-                        Text("Coming in phase 2")
-                            .navigationTitle("Units & region")
+                    NavigationLink {
+                        UnitsRegionView()
+                    } label: {
+                        Label("Units & region", systemImage: "ruler")
                     }
                 }
 

@@ -27,10 +27,17 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
-      - name: Boot iPhone 16 simulator
+      - name: Resolve CI simulator
+        id: simulator
         run: |
-          xcrun simctl boot "iPhone 16" 2>/dev/null || true
-          xcrun simctl bootstatus "iPhone 16" -b
+          chmod +x scripts/select-ci-simulator.sh
+          eval "$(bash scripts/select-ci-simulator.sh)"
+          echo "name=$simulator_name" >> "$GITHUB_OUTPUT"
+
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "${{ steps.simulator.outputs.name }}" 2>/dev/null || true
+          xcrun simctl bootstatus "${{ steps.simulator.outputs.name }}" -b
 
       - name: Show Xcode version
         run: xcodebuild -version

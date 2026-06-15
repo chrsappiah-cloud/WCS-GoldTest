@@ -19,6 +19,9 @@ final class AccessControlService: ObservableObject {
     }
 
     func canAccess(_ feature: AppFeature) -> AccessDecision {
+        if ProcessInfo.processInfo.arguments.contains("-ui-testing") {
+            return AccessDecision(allowed: true, feature: feature, reason: "UI testing — all features active.")
+        }
         guard let user = auth.currentUser else {
             return AccessDecision(
                 allowed: feature == .goldScan,

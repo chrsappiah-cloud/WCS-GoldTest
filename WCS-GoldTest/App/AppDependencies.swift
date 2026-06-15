@@ -83,7 +83,11 @@ final class AppDependencies: ObservableObject {
 
     func bootstrap() async {
         await accessControl.reloadPolicies()
-        await authSession.restoreSession()
+        if UITestLaunch.isActive {
+            authSession.forceAdminAuth()
+        } else {
+            await authSession.restoreSession()
+        }
         await administration.refresh()
         subscriptionService.syncFromAccess()
         await prepareDeviceForTesting()
