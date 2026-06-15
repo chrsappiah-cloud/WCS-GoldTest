@@ -42,8 +42,10 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
 
-      - name: Install Fastlane
-        run: bundle install
+      - name: Prepare Bundler
+        run: |
+          bundle config set --local path.system true
+          bundle install --jobs 4 --retry 3
 
       - name: Import code signing certificate
         uses: apple-actions/import-codesign-certs@v3
