@@ -82,17 +82,6 @@ final class FullAppExplorationUITests: WCSUITestCase {
         navigateBack()
     }
 
-    // MARK: - Helpers
-
-    private func tapSettingsRow(identifier: String, fallback: String) {
-        let link = app.buttons[identifier]
-        if link.waitForExistence(timeout: 3) {
-            link.tap()
-            return
-        }
-        app.staticTexts[fallback].tap()
-    }
-
     private func navigateBack() {
         let back = app.navigationBars.buttons.element(boundBy: 0)
         if back.waitForExistence(timeout: 3), back.isHittable {

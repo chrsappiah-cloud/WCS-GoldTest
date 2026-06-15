@@ -31,8 +31,12 @@ jobs:
         id: simulator
         run: |
           chmod +x scripts/select-ci-simulator.sh
-          source <(bash scripts/select-ci-simulator.sh 2>/dev/null)
-          echo "name=${simulator_name}" >> "$GITHUB_OUTPUT"
+          SIMULATOR_NAME="$(bash scripts/select-ci-simulator.sh 2>/dev/null | grep '^simulator_name=' | cut -d= -f2-)"
+          if [[ -z "$SIMULATOR_NAME" ]]; then
+            SIMULATOR_NAME="iPhone 16"
+          fi
+          echo "name=${SIMULATOR_NAME}" >> "$GITHUB_OUTPUT"
+          echo "Using simulator: ${SIMULATOR_NAME}"
 
       - name: Boot simulator
         run: |
@@ -54,7 +58,7 @@ jobs:
           xcodebuild build \
             -project WCS-GoldTest.xcodeproj \
             -scheme WCS-GoldTest \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.name }},OS=latest" \
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO \
             | tee xcodebuild-build.log
@@ -79,13 +83,23 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
+      - name: Resolve CI simulator
+        id: simulator
+        run: |
+          chmod +x scripts/select-ci-simulator.sh
+          SIMULATOR_NAME="$(bash scripts/select-ci-simulator.sh 2>/dev/null | grep '^simulator_name=' | cut -d= -f2-)"
+          if [[ -z "$SIMULATOR_NAME" ]]; then
+            SIMULATOR_NAME="iPhone 16"
+          fi
+          echo "name=${SIMULATOR_NAME}" >> "$GITHUB_OUTPUT"
+
       - name: Run unit tests
         run: |
           set -o pipefail
           xcodebuild test \
             -project WCS-GoldTest.xcodeproj \
             -scheme WCS-GoldTest \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.name }},OS=latest" \
             -configuration Debug \
             -only-testing:WCS-GoldTestTests \
             -resultBundlePath TestResults-Unit.xcresult \
@@ -114,13 +128,23 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
+      - name: Resolve CI simulator
+        id: simulator
+        run: |
+          chmod +x scripts/select-ci-simulator.sh
+          SIMULATOR_NAME="$(bash scripts/select-ci-simulator.sh 2>/dev/null | grep '^simulator_name=' | cut -d= -f2-)"
+          if [[ -z "$SIMULATOR_NAME" ]]; then
+            SIMULATOR_NAME="iPhone 16"
+          fi
+          echo "name=${SIMULATOR_NAME}" >> "$GITHUB_OUTPUT"
+
       - name: Run UI tests
         run: |
           set -o pipefail
           xcodebuild test \
             -project WCS-GoldTest.xcodeproj \
             -scheme WCS-GoldTest \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.name }},OS=latest" \
             -configuration Debug \
             -only-testing:WCS-GoldTestUITests \
             -resultBundlePath TestResults-UI.xcresult \

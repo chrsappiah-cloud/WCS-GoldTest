@@ -92,6 +92,71 @@ class WCSUITestCase: XCTestCase {
         }
     }
 
+    func scrollToReveal(_ element: XCUIElement, in scrollable: XCUIElement? = nil, maxSwipes: Int = 12) {
+        let container = scrollable ?? settingsScrollView()
+        var swipes = 0
+        while swipes < maxSwipes {
+            if element.exists, element.isHittable { return }
+            container.swipeUp()
+            swipes += 1
+        }
+    }
+
+    func settingsScrollView() -> XCUIElement {
+        if app.tables.firstMatch.exists { return app.tables.firstMatch }
+        if app.collectionViews.firstMatch.exists { return app.collectionViews.firstMatch }
+        if app.scrollViews.firstMatch.exists { return app.scrollViews.firstMatch }
+        return app
+    }
+
+    func scrollSettingsToTop(maxSwipes: Int = 10) {
+        let scrollable = settingsScrollView()
+        for _ in 0..<maxSwipes {
+            scrollable.swipeDown()
+        }
+    }
+
+    func tapSettingsRow(identifier: String, fallback: String, file: StaticString = #filePath, line: UInt = #line) {
+        scrollSettingsToTop()
+        let scrollable = settingsScrollView()
+
+        for _ in 0..<12 {
+            let byId = app.buttons[identifier]
+            if byId.exists, byId.isHittable {
+                byId.tap()
+                return
+            }
+
+            let byLabel = app.buttons[fallback]
+            if byLabel.exists, byLabel.isHittable {
+                byLabel.tap()
+                return
+            }
+
+            let text = app.staticTexts[fallback]
+            if text.exists, text.isHittable {
+                text.tap()
+                return
+            }
+
+            let cell = app.cells.containing(NSPredicate(format: "label CONTAINS[c] %@", fallback)).firstMatch
+            if cell.exists, cell.isHittable {
+                cell.tap()
+                return
+            }
+
+            scrollable.swipeUp()
+        }
+
+        XCTFail("Settings row '\(fallback)' missing", file: file, line: line)
+    }
+
+    func completeScanChecklist() {
+        tapSwitch(identifier: AccessibilityID.Scan.checklistToggle, fallbackLabel: "Probe cleaned and seated")
+        tapSwitch(identifier: AccessibilityID.Scan.surfaceDryToggle, fallbackLabel: "Item surface dry and accessible")
+        tapSwitch(identifier: AccessibilityID.Scan.stableHandToggle, fallbackLabel: "Stable hand position")
+    }
+
     func signInAsAdmin() {
         selectTab("Settings")
         tapButton(identifier: AccessibilityID.Settings.accountAccess, fallbackLabel: "Sign in & entitlements")

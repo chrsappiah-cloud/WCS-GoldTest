@@ -28,6 +28,8 @@ enum AccessibilityID {
 
     enum Scan {
         static let checklistToggle = "scan.checklistToggle"
+        static let surfaceDryToggle = "scan.surfaceDryToggle"
+        static let stableHandToggle = "scan.stableHandToggle"
         static let startGoldScan = "scan.startGoldScan"
     }
 

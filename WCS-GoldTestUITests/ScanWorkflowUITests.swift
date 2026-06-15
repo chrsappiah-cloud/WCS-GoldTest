@@ -23,7 +23,7 @@ final class ScanWorkflowUITests: WCSUITestCase {
 
     func testCompleteMockGoldScanFlow() throws {
         selectTab("Scan")
-        tapSwitch(identifier: AccessibilityID.Scan.checklistToggle, fallbackLabel: "Probe cleaned and seated")
+        completeScanChecklist()
 
         let start = app.buttons[AccessibilityID.Scan.startGoldScan]
         if !start.waitForExistence(timeout: 3) {

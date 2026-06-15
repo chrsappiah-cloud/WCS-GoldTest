@@ -81,7 +81,9 @@ struct ScanSetupView: View {
                         Toggle("Probe cleaned and seated", isOn: $viewModel.checklistComplete)
                             .accessibilityIdentifier(AccessibilityID.Scan.checklistToggle)
                         Toggle("Item surface dry and accessible", isOn: $viewModel.surfaceDryAccessible)
+                            .accessibilityIdentifier(AccessibilityID.Scan.surfaceDryToggle)
                         Toggle("Stable hand position", isOn: $viewModel.stableHandPosition)
+                            .accessibilityIdentifier(AccessibilityID.Scan.stableHandToggle)
                     }
                 }
 
