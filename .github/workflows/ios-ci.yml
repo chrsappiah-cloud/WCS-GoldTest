@@ -31,8 +31,8 @@ jobs:
         id: simulator
         run: |
           chmod +x scripts/select-ci-simulator.sh
-          eval "$(bash scripts/select-ci-simulator.sh)"
-          echo "name=$simulator_name" >> "$GITHUB_OUTPUT"
+          source <(bash scripts/select-ci-simulator.sh 2>/dev/null)
+          echo "name=${simulator_name}" >> "$GITHUB_OUTPUT"
 
       - name: Boot simulator
         run: |

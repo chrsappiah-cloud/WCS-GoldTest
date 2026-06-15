@@ -23,5 +23,5 @@ pick_simulator() {
 }
 
 SIMULATOR_NAME="$(pick_simulator)"
-echo "Using simulator: $SIMULATOR_NAME"
+>&2 echo "Using simulator: $SIMULATOR_NAME"
 echo "simulator_name=$SIMULATOR_NAME"
