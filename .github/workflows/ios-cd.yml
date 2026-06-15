@@ -51,7 +51,7 @@ jobs:
           zip -r ../marketing-bundle.zip images investor-deck.html
 
       - name: Upload release artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wcs-goldtest-release-${{ github.sha }}
           path: marketing-bundle.zip
